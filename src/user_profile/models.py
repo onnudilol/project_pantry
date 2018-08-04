@@ -18,21 +18,25 @@ class UserLocation(models.Model):
 
 class DietaryRestriction(models.Model):
     user = models.OneToOneField(User, unique=True, on_delete=models.CASCADE)
-    milk = models.BooleanField(default=False)
-    nuts = models.BooleanField(default=False)
-    peanuts = models.BooleanField(default=False)
-    tree_nuts = models.BooleanField(default=False)
-    soy = models.BooleanField(default=False)
-    wheat = models.BooleanField(default=False)
-    fish = models.BooleanField(default=False)
-    shellfish = models.BooleanField(default=False)
+
+
+class Allergen(models.Model):
+    name = models.CharField(max_length=300)
+    list = models.ForeignKey(DietaryRestriction, on_delete=models.CASCADE)
 
 
 class UserRating(models.Model):
+    ENDORSEMENT = (
+        ('TASTE', 'Excellent Taste'),
+        ('HELP', 'Helpful'),
+        ('LEADER', 'Good Leadership')
+    )
+
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
     review_author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='review_author')
     text = models.TextField()
     score = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    endorsement = models.CharField(max_length=25, choices=ENDORSEMENT, blank=True, null=True)
 
     class Meta:
         unique_together = ('user', 'review_author')
