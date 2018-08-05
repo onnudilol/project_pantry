@@ -5,9 +5,9 @@ from rest_framework.decorators import permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 
-from party.models import Party, FoodList, FoodListItem
+from party.models import Party, FoodList, FoodListItem, FoodListItemVote
 from restaurant.models import Restaurant, FoodItem
-from party.serializers import PartySerializer
+from party.serializers import PartySerializer, FoodListSerializer
 
 User = get_user_model()
 
@@ -53,10 +53,23 @@ def add_item_to_list(request):
 
     if party.dictator is False and user in party.user_set.all():
         food_list_item = FoodListItem.objects.create(list=party.foodlist, item=food_item)
+        serializer = FoodListSerializer(food_list_item.foodlist)
 
-        return Response
+        return Response(serializer.data, status=status.HTTP_201_OK)
 
     else:
-        return
+        return Response(status=status.HTTP_403_FORBIDDEN)
 
 
+@permission_classes([IsAuthenticated])
+@api_view(['POST'])
+def vote_item(request):
+    user = request.user
+    food_list_item = FoodListItem.objects.get(id=request.data['food_list_item_id'])
+
+    if request.user in food_list_item.foodlist.users.objects.all():
+        FoodListItemVote.objects.create(user=user, item=food_list_item, vote_type=request.data['vote_type'])
+
+    serializer = FoodListSerializer(food_list_item.foodlist)
+
+    return Response(serializer.data, response=status.HTTP_201_CREATED)
