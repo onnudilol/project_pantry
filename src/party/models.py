@@ -22,8 +22,11 @@ class FoodList(models.Model):
 
 
 class FoodListItem(models.Model):
-    list = models.ForeignKey(FoodList, on_delete=models.CASCADE)
+    list = models.ForeignKey(FoodList, related_name='items', on_delete=models.CASCADE)
     item = models.ForeignKey(FoodItem, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.item.name
 
 
 class FoodListItemVote(models.Model):

@@ -42,7 +42,12 @@ INSTALLED_APPS = [
     # user apps
     'party',
     'restaurant',
-    'user_profile'
+    'user_profile',
+
+    # third party apps
+    'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth'
 ]
 
 MIDDLEWARE = [
