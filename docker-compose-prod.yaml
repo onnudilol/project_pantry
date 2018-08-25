@@ -15,7 +15,9 @@ services:
       - ./src:/code
       - ./volumes/media:/var/www/media
       - ./volumes/static:/var/www/static
-      - ./config/nginx/dev:/etc/nginx/conf.d
+      - ./config/nginx/prod:/etc/nginx/conf.d
+      - /etc/letsencrypt/live/wafu.app/fullchain.pem:/etc/letsencrypt/live/wafu.app/fullchain.pem
+      - /etc/letsencrypt/live/wafu.app/privkey.pem:/etc/letsencrypt/live/wafu.app/privkey.pem
     ports:
       - "80:80"
     depends_on:
