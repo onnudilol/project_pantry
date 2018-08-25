@@ -20,6 +20,7 @@ services:
       - /etc/letsencrypt/live/wafu.app/privkey.pem:/etc/letsencrypt/live/wafu.app/privkey.pem
     ports:
       - "80:80"
+      - "443:443"
     depends_on:
       - web
 
