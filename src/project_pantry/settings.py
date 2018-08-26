@@ -25,7 +25,10 @@ SECRET_KEY = 'mwoz3ua3wbq&#79_q^an&ajj9*qv@cey*0p3(yda8$wl&8y797'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ['DJANGO_DEBUG'] == 'True'
 
-ALLOWED_HOSTS = ['localhost', 'wafu.app']
+ALLOWED_HOSTS = ['wafu.app']
+
+if DEBUG:
+    ALLOWED_HOSTS.append('localhost')
 
 
 # Application definition
