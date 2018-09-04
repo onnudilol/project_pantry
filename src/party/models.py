@@ -27,9 +27,13 @@ class FoodList(models.Model):
 class FoodListItem(models.Model):
     list = models.ForeignKey(FoodList, related_name='items', on_delete=models.CASCADE)
     item = models.ForeignKey(FoodItem, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
 
     def __str__(self):
         return self.item.name
+
+    class Meta:
+        unique_together = ('list', 'item')
 
 
 class FoodListItemVote(models.Model):

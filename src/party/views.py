@@ -1,5 +1,6 @@
 from rest_framework.decorators import api_view
 from django.contrib.auth import get_user_model
+from django.db import IntegrityError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
 from rest_framework.response import Response
@@ -24,6 +25,7 @@ def create_party(request):
 
     party = Party.objects.create(leader=leader, title=title, description=description, dictator=dictator, start_time=start_time)
     party.restaurant.set([restaurant])
+    party.user.add(leader)
     FoodList.objects.create(party=party)
     serializer = PartySerializer(data=party)
     serializer.is_valid()
@@ -55,11 +57,17 @@ def add_item_to_list(request):
     party = Party.objects.get(id=request.data['party_id'])
     food_item = FoodItem.objects.get(id=request.data['food_item_id'])
 
-    if party.dictator is False and user in party.user_set.all():
-        food_list_item = FoodListItem.objects.create(list=party.foodlist, item=food_item)
-        serializer = FoodListSerializer(food_list_item.foodlist)
+    if party.dictator is False and user in party.user.all():
 
-        return Response(serializer.data, status=status.HTTP_201_OK)
+        try:
+            food_list_item = FoodListItem.objects.create(list=party.foodlist, item=food_item)
+            serializer = FoodListSerializer(food_list_item.list)
+            serializer.is_valid()
+
+        except IntegrityError:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     else:
         return Response(status=status.HTTP_403_FORBIDDEN)

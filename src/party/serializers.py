@@ -23,4 +23,5 @@ class FoodListSerializer(serializers.ModelSerializer):
     items = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
-        model = Party
+        model = FoodList
+        fields = ('party', 'items',)
