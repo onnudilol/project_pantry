@@ -16,18 +16,21 @@ User = get_user_model()
 @api_view(['POST'])
 def create_party(request):
     leader = request.user
-    restaurant = Restaurant.objects.get(request.data['restaurant'])
+    restaurant = Restaurant.objects.get(name=request.data['restaurant'])
     title = request.data['title']
     description = request.data['description']
-    dictator = request.data['dictator']
+    dictator = request.data['dictator'].lower() == 'true'
     start_time = request.data['start_time']
 
-    party = Party.objects.create(leader=leader, restaurant=restaurant, title=title, description=description,
-                                 dictator=dictator, start_time=start_time)
+    party = Party.objects.create(leader=leader, title=title, description=description, dictator=dictator, start_time=start_time)
+    party.restaurant.set([restaurant])
     FoodList.objects.create(party=party)
     serializer = PartySerializer(data=party)
+    serializer.is_valid()
 
     return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+# {"restaurant": "Popeyes", "title": "test title", "description": "test description", "dictator": "true", "start_time": "2010-04-20T20:08:21.634121"}
 
 
 @permission_classes([IsAuthenticated])
