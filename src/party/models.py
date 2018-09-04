@@ -16,6 +16,9 @@ class Party(models.Model):
     dictator = models.BooleanField(default=False)
     start_time = models.DateTimeField()
 
+    def __str__(self):
+        return self.title
+
 
 class FoodList(models.Model):
     party = models.OneToOneField(Party, on_delete=models.CASCADE)
