@@ -11,7 +11,7 @@ class Party(models.Model):
     restaurant = models.ManyToManyField(Restaurant)
     title = models.CharField(max_length=300)
     description = models.TextField()
-    user = models.ManyToManyField(User)
+    users = models.ManyToManyField(User)
     leader = models.ForeignKey(User, on_delete=models.CASCADE, related_name='party_leader')
     dictator = models.BooleanField(default=False)
     start_time = models.DateTimeField()
