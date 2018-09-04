@@ -40,9 +40,10 @@ def join_party(request):
     party = Party.objects.get(id=request.data['party_id'])
 
     if party not in user.party_set.all():
-        user.party.add(party)
+        user.party_set.add(party)
 
     serializer = PartySerializer(data=party)
+    serializer.is_valid()
 
     return Response(serializer.data, status=status.HTTP_200_OK)
 
