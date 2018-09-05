@@ -11,16 +11,17 @@ class PartySerializer(serializers.ModelSerializer):
 
 
 class FoodItemSerializer(serializers.ModelSerializer):
-    item =  serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    item = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
 
     class Meta:
         model = FoodListItem
-        fields = ('item')
+        fields = ('item',)
 
 
 class FoodListSerializer(serializers.ModelSerializer):
     items = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
-        model = Party
+        model = FoodList
+        fields = ('party', 'items',)
