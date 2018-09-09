@@ -10,6 +10,9 @@ class Restaurant(models.Model):
     name = models.CharField(max_length=300)
     location = models.PointField()
 
+    def __str__(self):
+        return self.name
+
 
 class RestaurantRating(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -23,9 +23,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'mwoz3ua3wbq&#79_q^an&ajj9*qv@cey*0p3(yda8$wl&8y797'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ['DJANGO_DEBUG'] == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['wafu.app']
+
+if DEBUG:
+    ALLOWED_HOSTS.append('localhost')
 
 
 # Application definition
@@ -38,12 +41,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.gis'
 
     # user apps
     'party',
     'restaurant',
-    'user_profile'
+    'user_profile',
+
+    # third party apps
+    'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth'
 ]
 
 MIDDLEWARE = [
