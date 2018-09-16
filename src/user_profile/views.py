@@ -27,8 +27,9 @@ def get_profile(request, username):
 @api_view(['GET'])
 def get_friends_list(request, username):
     person = User.objects.get(username=username)
-    friend_list = FriendList(owner=person)
+    friend_list = FriendList.objects.get(owner=person)
 
     serializer = FriendListSerializer(friend_list)
+    print(friend_list)
 
     return Response(serializer.data, status=status.HTTP_200_OK)

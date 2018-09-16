@@ -4,6 +4,7 @@ from user_profile.models import UserProfile, DietaryRestriction, Allergen, UserR
 
 
 User = get_user_model()
+BASE_URL = 'http://example.com'
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -37,10 +38,14 @@ class AllergenSerializer(serializers.ModelSerializer):
 
 
 class FriendSerializer(serializers.ModelSerializer):
+    user_url = serializers.SerializerMethodField()
+
+    def get_user_url(self, obj):
+        return f'{BASE_URL}/api/profile/{obj.username}/'
 
     class Meta:
         model = User
-        fields = ('username',)
+        fields = ('username', 'user_url')
 
 
 class FriendListSerializer(serializers.ModelSerializer):
