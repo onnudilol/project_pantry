@@ -15,10 +15,12 @@ User = get_user_model()
 @api_view(['GET'])
 def get_profile(request, username):
     person = User.objects.get(username=username)
-    avg_rating = UserRating.objects.filter(user=person).annotate(rating_avg=Avg('score'))
-    profile = UserProfile.objects.filter(user=person).annotate(avg_rating=avg_rating)
+    avg_rating = UserRating.objects.aggregate(rating_avg=Avg('score'))
+    profile = UserProfile.objects.get(user=person)
 
-    print(profile)
+    profile.avg_rating = avg_rating
+
+    print(profile.avg_rating)
 
     serializer = ProfileSerializer(profile)
 

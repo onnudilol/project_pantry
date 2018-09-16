@@ -16,6 +16,12 @@ User = get_user_model()
 @permission_classes([IsAuthenticated])
 @api_view(['POST'])
 def create_party(request):
+    """
+    Creates a party for a logged in user
+    Accepts the following POST parameters: restaurant, title, description, dictator, start time
+    Returns a JSON object representation of the party
+    """
+
     leader = request.user
     restaurant = Restaurant.objects.get(name=request.data['restaurant'])
     title = request.data['title']
@@ -32,12 +38,14 @@ def create_party(request):
 
     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-# {"restaurant": "Popeyes", "title": "test title", "description": "test description", "dictator": "true", "start_time": "2010-04-20T20:08:21.634121"}
-
 
 @permission_classes([IsAuthenticated])
 @api_view(['POST'])
 def join_party(request):
+    """
+    Joins a logged in user to a party
+    """
+
     user = request.user
     party = Party.objects.get(id=request.data['party_id'])
 
@@ -53,6 +61,10 @@ def join_party(request):
 @permission_classes([IsAuthenticated])
 @api_view(['POST'])
 def add_item_to_list(request):
+    """
+    Allows a logged in user to add a food item to a party food list
+    """
+
     user = request.user
     party = Party.objects.get(id=request.data['party_id'])
     food_item = FoodItem.objects.get(id=request.data['food_item_id'])
@@ -76,6 +88,10 @@ def add_item_to_list(request):
 @permission_classes([IsAuthenticated])
 @api_view(['POST'])
 def vote_item(request):
+    """
+    Allows a logged in user to vote on a food item in a list
+    """
+
     user = request.user
     food_list_item = FoodListItem.objects.get(id=request.data['food_list_item_id'])
 
