@@ -5,6 +5,11 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 User = get_user_model()
 
 
+class FriendList(models.Model):
+    owner = models.OneToOneField(User, unique=True, on_delete=models.CASCADE, related_name='friend_list_owner')
+    friends = models.ManyToManyField(User, related_name='friend')
+
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, unique=True, on_delete=models.CASCADE)
     age = models.IntegerField()
@@ -23,6 +28,9 @@ class DietaryRestriction(models.Model):
 class Allergen(models.Model):
     name = models.CharField(max_length=300)
     list = models.ForeignKey(DietaryRestriction, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
 
 
 class UserRating(models.Model):

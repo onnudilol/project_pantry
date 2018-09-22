@@ -10,6 +10,6 @@ ipython = "*"
 django = "*"
 "psycopg2-binary" = "*"
 gunicorn = "*"
+django-rest-swagger = "*"
 
 [dev-packages]
-
