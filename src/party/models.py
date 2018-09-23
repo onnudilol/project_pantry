@@ -15,6 +15,7 @@ class Party(models.Model):
     leader = models.ForeignKey(User, on_delete=models.CASCADE, related_name='party_leader')
     dictator = models.BooleanField(default=False)
     start_time = models.DateTimeField()
+    size_limit = models.IntegerField(default=1)
 
     def __str__(self):
         return self.title

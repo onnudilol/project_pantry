@@ -28,8 +28,10 @@ def create_party(request):
     description = request.data['description']
     dictator = request.data['dictator'].lower() == 'true'
     start_time = request.data['start_time']
+    size_limit = request.data['size_limit']
 
-    party = Party.objects.create(leader=leader, title=title, description=description, dictator=dictator, start_time=start_time)
+    party = Party.objects.create(leader=leader, title=title, description=description, dictator=dictator,
+                                 start_time=start_time, size_limit=size_limit)
     party.restaurant.set([restaurant])
     party.users.add(leader)
     FoodList.objects.create(party=party)
@@ -50,7 +52,12 @@ def join_party(request):
     party = Party.objects.get(id=request.data['party_id'])
 
     if party not in user.party_set.all():
-        user.party_set.add(party)
+
+        if party.users.count() + 1 <= party.size_limit:
+            user.party_set.add(party)
+
+        else:
+            return Response(status=status.HTTP_403_FORBIDDEN)
 
     serializer = PartySerializer(data=party)
     serializer.is_valid()
