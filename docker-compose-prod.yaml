@@ -7,6 +7,9 @@ services:
     restart: on-failure
     ports:
       - "5432:5432"
+    command: postgres -c config_file=/etc/postgresql.conf
+    volumes:
+      - ./config/postgres/postgresq.conf:/etc/postgresql.conf
 
   nginx:
     image: nginx:latest
