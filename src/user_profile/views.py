@@ -24,6 +24,20 @@ def get_profile(request, username):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+@api_view(['POST', 'PUT'])
+def edit_profile(request, username):
+    person = User.objects.get(username=username)
+    profile = UserProfile.objects.get_or_create(user=person)
+
+    if request.method == 'PUT':
+        profile.update(**request.PUT)
+
+    serializer = ProfileSerializer(profile)
+
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
 @api_view(['GET'])
 def get_friends_list(request, username):
     person = User.objects.get(username=username)
